@@ -136,7 +136,8 @@ export default function FileUpload({ selectedNoteId, onBack }) {
   // --------------------
 // COPY & DOWNLOAD
 // --------------------
-const handleCopy = async () => {
+const handleCopyNotes = async () => {
+
   if (!notes) return;
   await navigator.clipboard.writeText(notes);
   alert("Notes copied!");
@@ -247,9 +248,10 @@ const handleDownload = () => {
             <pre>{notes}</pre>
 
             <div className="notes-actions">
-              <button className="action-btn" onClick={handleCopy}>
-                📋 Copy
-              </button>
+           <button className="action-btn" onClick={handleCopyNotes}>
+  📋 Copy
+</button>
+
               <button
                 className="action-btn"
                 onClick={handleDownload}
