@@ -43,26 +43,7 @@ It supports authentication, note history, quiz tracking, and a dashboard for man
 ---
 
 ## 📁 Project Structure
-notesgenie/
-│
-├── frontend/
-│ ├── src/
-│ │ ├── App.jsx
-│ │ ├── Login.jsx
-│ │ ├── Dashboard.jsx
-│ │ ├── FileUpload.jsx
-│ │ └── QuizModal.jsx
-│
-├── backend/
-│ ├── server.cjs
-│ ├── auth.cjs
-│ ├── db.cjs
-│ └── models/
-│ ├── User.cjs
-│ ├── Note.cjs
-│ └── QuizAttempt.cjs
-│
-└── README.md
+<img width="311" height="527" alt="image" src="https://github.com/user-attachments/assets/58e76438-8370-4c5e-9398-ef4c85a86e1c" />
 
 
 ## 🔐 Environment Variables
