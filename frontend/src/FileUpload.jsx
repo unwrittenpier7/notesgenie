@@ -107,6 +107,7 @@ export default function FileUpload({ selectedNoteId, onBack }) {
   // --------------------
   // ASK NOTES
   // --------------------
+  
   const handleAsk = async () => {
     if (!question.trim()) return;
 
@@ -130,6 +131,31 @@ export default function FileUpload({ selectedNoteId, onBack }) {
       setAnswer("❌ Failed to respond.");
     }
   };
+
+
+  // --------------------
+// COPY & DOWNLOAD
+// --------------------
+const handleCopy = async () => {
+  if (!notes) return;
+  await navigator.clipboard.writeText(notes);
+  alert("Notes copied!");
+};
+
+const handleDownload = () => {
+  if (!notes) return;
+
+  const blob = new Blob([notes], { type: "text/plain" });
+  const url = URL.createObjectURL(blob);
+
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "notes.txt";
+  a.click();
+
+  URL.revokeObjectURL(url);
+};
+
 
   // --------------------
   // RENDER
