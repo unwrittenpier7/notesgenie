@@ -27,15 +27,17 @@ const app = express();
 app.use(
   cors({
     origin: [
-  "http://localhost:5173",
-  "https://your-frontend.netlify.app"
-],
-
-    credentials: true,
-    methods: ["GET", "POST", "PUT", "DELETE"],
-    allowedHeaders: ["Content-Type", "Authorization"]
+      "http://localhost:5173",
+      "https://notesgenie-frontend.vercel.app"
+    ],
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+    credentials: true
   })
+  
 );
+app.options("*", cors());
+/* =========================
 
 app.use(express.json());
 
