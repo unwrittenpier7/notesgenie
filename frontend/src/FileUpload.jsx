@@ -136,6 +136,8 @@ export default function FileUpload({ selectedNoteId, onBack }) {
   // --------------------
 // COPY & DOWNLOAD
 // --------------------
+  const handleCopy = handleCopyNotes;
+
 const handleCopyNotes = async () => {
 
   if (!notes) return;
