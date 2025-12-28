@@ -12,23 +12,23 @@ export default function Dashboard({ onCreateNew, onOpenNote }) {
 
   useEffect(() => {
     // Fetch notes history
-    fetch("http://localhost:5000/notes/history", {
-      headers: { Authorization: `Bearer ${token}` }
+    fetch("https://notesgenie-backend.onrender.com/notes/history", {
+      headers: { Authorization: `Bearer ${token}` },
     })
-      .then(res => res.json())
+      .then((res) => res.json())
       .then(setNotes);
 
     // Fetch dashboard stats
-    fetch("http://localhost:5000/dashboard/stats", {
-      headers: { Authorization: `Bearer ${token}` }
+    fetch("https://notesgenie-backend.onrender.com/dashboard/stats", {
+      headers: { Authorization: `Bearer ${token}` },
     })
-      .then(res => res.json())
+      .then((res) => res.json())
       .then(setStats);
   }, []);
 
   // 🔍 SEARCH + SORT LOGIC
   const filteredNotes = notes
-    .filter(note =>
+    .filter((note) =>
       note.fileName.toLowerCase().includes(search.toLowerCase())
     )
     .sort((a, b) => {
@@ -42,16 +42,19 @@ export default function Dashboard({ onCreateNew, onOpenNote }) {
   const deleteNote = async (id) => {
     if (!window.confirm("Delete this note permanently?")) return;
 
-    await fetch(`http://localhost:5000/notes/${id}`, {
-      method: "DELETE",
-      headers: {
-        Authorization: `Bearer ${token}`
+    await fetch(
+      `https://notesgenie-backend.onrender.com/notes/${id}`,
+      {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       }
-    });
+    );
 
-    setNotes(prev => prev.filter(n => n._id !== id));
+    setNotes((prev) => prev.filter((n) => n._id !== id));
 
-    setQuizHistory(prev => {
+    setQuizHistory((prev) => {
       const copy = { ...prev };
       delete copy[id];
       return copy;
@@ -63,16 +66,16 @@ export default function Dashboard({ onCreateNew, onOpenNote }) {
     if (quizHistory[noteId]) return;
 
     const res = await fetch(
-      `http://localhost:5000/quiz/history/${noteId}`,
+      `https://notesgenie-backend.onrender.com/quiz/history/${noteId}`,
       {
-        headers: { Authorization: `Bearer ${token}` }
+        headers: { Authorization: `Bearer ${token}` },
       }
     );
     const data = await res.json();
 
-    setQuizHistory(prev => ({
+    setQuizHistory((prev) => ({
       ...prev,
-      [noteId]: data
+      [noteId]: data,
     }));
   };
 
@@ -141,7 +144,7 @@ export default function Dashboard({ onCreateNew, onOpenNote }) {
       <div className="notes-list">
         {filteredNotes.length === 0 && <p>No matching notes.</p>}
 
-        {filteredNotes.map(note => (
+        {filteredNotes.map((note) => (
           <div key={note._id} className="note-card">
             <div className="note-info">
               <strong>{note.fileName}</strong>

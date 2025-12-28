@@ -11,7 +11,6 @@ export default function FileUpload({ selectedNoteId, onBack }) {
 
   const [transcribeAudio, setTranscribeAudio] = useState(false);
 
-
   const [quiz, setQuiz] = useState([]);
   const [showQuiz, setShowQuiz] = useState(false);
 
@@ -29,18 +28,21 @@ export default function FileUpload({ selectedNoteId, onBack }) {
   const token = localStorage.getItem("token");
 
   // --------------------
-  // LOAD EXISTING NOTE (FROM DASHBOARD)
+  // LOAD EXISTING NOTE
   // --------------------
   useEffect(() => {
     if (!selectedNoteId) return;
 
-    fetch(`http://localhost:5000/notes/${selectedNoteId}`, {
-      headers: {
-        Authorization: `Bearer ${token}`
+    fetch(
+      `https://notesgenie-backend.onrender.com/notes/${selectedNoteId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       }
-    })
-      .then(res => res.json())
-      .then(data => {
+    )
+      .then((res) => res.json())
+      .then((data) => {
         setNotes(data.notes || "");
         setDiagramUrl(data.diagramUrl || "");
         setQuiz([]);
@@ -72,13 +74,16 @@ export default function FileUpload({ selectedNoteId, onBack }) {
     setNoteId(null);
 
     try {
-      const response = await fetch("http://localhost:5000/upload", {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${token}`
-        },
-        body: formData
-      });
+      const response = await fetch(
+        "https://notesgenie-backend.onrender.com/upload",
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          body: formData,
+        }
+      );
 
       if (!response.ok) throw new Error("Upload failed");
 
@@ -100,24 +105,6 @@ export default function FileUpload({ selectedNoteId, onBack }) {
   };
 
   // --------------------
-  // COPY & DOWNLOAD
-  // --------------------
-  const handleCopy = async () => {
-    await navigator.clipboard.writeText(notes);
-    alert("Notes copied!");
-  };
-
-  const handleDownload = () => {
-    const blob = new Blob([notes], { type: "text/plain" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = "notes.txt";
-    a.click();
-    URL.revokeObjectURL(url);
-  };
-
-  // --------------------
   // ASK NOTES
   // --------------------
   const handleAsk = async () => {
@@ -125,14 +112,17 @@ export default function FileUpload({ selectedNoteId, onBack }) {
 
     setAnswer("⏳ Thinking...");
     try {
-      const res = await fetch("http://localhost:5000/ask", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`
-        },
-        body: JSON.stringify({ question, notes })
-      });
+      const res = await fetch(
+        "https://notesgenie-backend.onrender.com/ask",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({ question, notes }),
+        }
+      );
 
       const data = await res.json();
       setAnswer(data.answer || "No answer generated.");
@@ -145,17 +135,11 @@ export default function FileUpload({ selectedNoteId, onBack }) {
   // RENDER
   // --------------------
   return (
-<div className="min-h-screen relative flex flex-col items-center justify-start p-6 bg-gray-50 text-gray-900">
+    <div className="min-h-screen relative flex flex-col items-center justify-start p-6 bg-gray-50 text-gray-900">
+      <button className="dashboard-btn" onClick={onBack}>
+        Dashboard
+      </button>
 
-      {/* DASHBOARD BUTTON */}
-      <button className="dashboard-btn"
-  onClick={onBack}
->
-  Dashboard
-</button>
-
-
-      {/* STEP 1: GENERATE */}
       {step === "generate" && (
         <>
           <h1 className="text-4xl font-bold mb-6 text-center">
@@ -189,20 +173,23 @@ export default function FileUpload({ selectedNoteId, onBack }) {
                 <input
                   type="checkbox"
                   checked={generateDiagram}
-                  onChange={() => setGenerateDiagram(!generateDiagram)}
+                  onChange={() =>
+                    setGenerateDiagram(!generateDiagram)
+                  }
                 />
                 Diagram 🖼️
               </label>
 
               <label>
-  <input
-    type="checkbox"
-    checked={transcribeAudio}
-    onChange={() => setTranscribeAudio(!transcribeAudio)}
-  />
-  Transcribe 🎙️
-</label>
-
+                <input
+                  type="checkbox"
+                  checked={transcribeAudio}
+                  onChange={() =>
+                    setTranscribeAudio(!transcribeAudio)
+                  }
+                />
+                Transcribe 🎙️
+              </label>
 
               <label>
                 <input
@@ -227,31 +214,32 @@ export default function FileUpload({ selectedNoteId, onBack }) {
         </>
       )}
 
-      {/* STEP 2: RESULT */}
       {step === "result" && (
         <div className="w-full max-w-4xl space-y-6">
-
           <div className="bg-white p-4 rounded-lg">
             <h3>Generated Notes</h3>
             <pre>{notes}</pre>
 
-           <div className="flex flex-wrap justify-end gap-3 mt-3">
-<div className="notes-actions">
-  <button className="action-btn" onClick={handleCopy}>📋 Copy</button>
-  <button className="action-btn" onClick={handleDownload}>⬇️ Download</button>
+            <div className="notes-actions">
+              <button className="action-btn" onClick={handleCopy}>
+                📋 Copy
+              </button>
+              <button
+                className="action-btn"
+                onClick={handleDownload}
+              >
+                ⬇️ Download
+              </button>
 
-  {quiz.length > 0 && (
-    <button
-      className="action-btn primary"
-      onClick={() => setShowQuiz(true)}
-    >
-      📝 Start Quiz
-    </button>
-  )}
-</div>
-
-</div>
-
+              {quiz.length > 0 && (
+                <button
+                  className="action-btn primary"
+                  onClick={() => setShowQuiz(true)}
+                >
+                  📝 Start Quiz
+                </button>
+              )}
+            </div>
           </div>
 
           {diagramUrl && (
@@ -264,24 +252,24 @@ export default function FileUpload({ selectedNoteId, onBack }) {
               />
             </div>
           )}
+
           <div className="ask-section">
-  <h3>Ask Your Notes</h3>
+            <h3>Ask Your Notes</h3>
 
-  <input
-    type="text"
-    value={question}
-    onChange={(e) => setQuestion(e.target.value)}
-    placeholder="Ask something..."
-    className="ask-input"
-  />
+            <input
+              type="text"
+              value={question}
+              onChange={(e) => setQuestion(e.target.value)}
+              placeholder="Ask something..."
+              className="ask-input"
+            />
 
-  <button onClick={handleAsk} className="ask-btn">
-    Ask
-  </button>
+            <button onClick={handleAsk} className="ask-btn">
+              Ask
+            </button>
 
-  {answer && <p className="ask-answer">{answer}</p>}
-</div>
-
+            {answer && <p className="ask-answer">{answer}</p>}
+          </div>
         </div>
       )}
 

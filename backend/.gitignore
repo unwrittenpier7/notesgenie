@@ -2,3 +2,6 @@ node_modules/
 .env
 uploads/
 dist/
+.env
+*.env
+backend/.env

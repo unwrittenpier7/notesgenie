@@ -48,19 +48,22 @@ export default function QuizModal({ quiz, noteId, onClose }) {
     setSaving(true);
 
     try {
-      await fetch("http://localhost:5000/quiz/submit", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`
-        },
-        body: JSON.stringify({
-          score: sc,
-          total: quiz.length,
-          answers,
-          noteId
-        })
-      });
+      await fetch(
+        "https://notesgenie-backend.onrender.com/quiz/submit",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            score: sc,
+            total: quiz.length,
+            answers,
+            noteId,
+          }),
+        }
+      );
     } catch (err) {
       console.error("❌ Failed to save quiz attempt", err);
     } finally {
@@ -90,7 +93,9 @@ export default function QuizModal({ quiz, noteId, onClose }) {
           return (
             <div key={idx} className="quiz-question">
               <p>
-                <strong>{idx + 1}. {q.question}</strong>
+                <strong>
+                  {idx + 1}. {q.question}
+                </strong>
               </p>
 
               {q.options.map((opt, i) => {

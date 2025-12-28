@@ -15,14 +15,14 @@ export default function Login({ onLogin }) {
 
     const url =
       mode === "signup"
-        ? "http://localhost:5000/auth/signup"
-        : "http://localhost:5000/auth/login";
+        ? "https://notesgenie-backend.onrender.com/auth/signup"
+        : "https://notesgenie-backend.onrender.com/auth/login";
 
     try {
       const res = await fetch(url, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password })
+        body: JSON.stringify({ email, password }),
       });
 
       const data = await res.json();

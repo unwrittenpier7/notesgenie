@@ -16,12 +16,12 @@ export default function App() {
     }
 
     // validate token with backend
-    fetch("http://localhost:5000/auth/me", {
+    fetch("https://notesgenie-backend.onrender.com/auth/me", {
       headers: {
-        Authorization: `Bearer ${token}`
-      }
+        Authorization: `Bearer ${token}`,
+      },
     })
-      .then(res => {
+      .then((res) => {
         if (res.ok) {
           setPage("dashboard");
         } else {
@@ -59,12 +59,10 @@ export default function App() {
   }
 
   // upload page
-// upload page
-return (
-  <FileUpload
-    selectedNoteId={selectedNoteId}
-    onBack={() => setPage("dashboard")}
-  />
-);
+  return (
+    <FileUpload
+      selectedNoteId={selectedNoteId}
+      onBack={() => setPage("dashboard")}
+    />
+  );
 }
-  
